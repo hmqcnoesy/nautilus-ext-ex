@@ -1,0 +1,21 @@
+﻿<?xml version='1.0' encoding='utf-8'?>
+<SettingsFile xmlns="http://schemas.microsoft.com/VisualStudio/2004/01/settings" CurrentProfile="(Default)" GeneratedClassNamespace="NautilusExtensions.Properties" GeneratedClassName="Settings">
+  <Profiles />
+  <Settings>
+    <Setting Name="NautilusExtensions_ReportingWebService_ReportingService" Type="(Web Service URL)" Scope="Application">
+      <Value Profile="(Default)">http://example.com/ReportServer/ReportService.asmx</Value>
+    </Setting>
+    <Setting Name="SmtpServer" Type="System.String" Scope="Application">
+      <Value Profile="(Default)">smtp-ut</Value>
+    </Setting>
+    <Setting Name="SmtpPort" Type="System.Int32" Scope="Application">
+      <Value Profile="(Default)">25</Value>
+    </Setting>
+    <Setting Name="EpicLauncherUri" Type="System.String" Scope="Application">
+      <Value Profile="(Default)">http://example.com/labsolutions/nautilusweb/epiclauncher</Value>
+    </Setting>
+    <Setting Name="ImageResultBrowserUri" Type="System.String" Scope="Application">
+      <Value Profile="(Default)">http://example.com/labsolutions/nautilusweb/imageresults</Value>
+    </Setting>
+  </Settings>
+</SettingsFile>
