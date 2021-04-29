@@ -41,28 +41,23 @@
       <HintPath>..\packages\ExcelDataReader.2.1.1\lib\net20\Excel.dll</HintPath>
     </Reference>
     <Reference Include="Interop.LSEXPLORERLib">
-      <HintPath>..\..\..\..\Tools\NautilusExtensions\Binaries\Interop.LSEXPLORERLib.dll</HintPath>
-      <EmbedInteropTypes>True</EmbedInteropTypes>
+      <HintPath>..\..\..\..\..\Program Files (x86)\Thermo\Nautilus\Interop.LSEXPLORERLib.dll</HintPath>
+      <EmbedInteropTypes>False</EmbedInteropTypes>
     </Reference>
     <Reference Include="Interop.LSEXT">
-      <HintPath>..\..\..\..\Tools\NautilusExtensions\Binaries\Interop.LSEXT.dll</HintPath>
-      <EmbedInteropTypes>True</EmbedInteropTypes>
-    </Reference>
-    <Reference Include="Interop.LSExtensionControlLib">
-      <HintPath>..\..\..\..\Tools\NautilusExtensions\Binaries\Interop.LSExtensionControlLib.dll</HintPath>
-      <EmbedInteropTypes>True</EmbedInteropTypes>
+      <HintPath>..\..\..\..\..\Program Files (x86)\Thermo\Nautilus\Interop.LSEXT.dll</HintPath>
+      <EmbedInteropTypes>False</EmbedInteropTypes>
     </Reference>
     <Reference Include="Interop.LSExtensionWindowLib">
-      <HintPath>..\..\..\..\Tools\NautilusExtensions\Binaries\Interop.LSExtensionWindowLib.dll</HintPath>
-      <EmbedInteropTypes>True</EmbedInteropTypes>
+      <HintPath>..\..\..\..\..\Program Files (x86)\Thermo\Nautilus\Interop.LSExtensionWindowLib.dll</HintPath>
+      <EmbedInteropTypes>False</EmbedInteropTypes>
     </Reference>
     <Reference Include="Interop.LSSERVICEPROVIDERLib">
-      <HintPath>..\..\..\..\Tools\NautilusExtensions\Binaries\Interop.LSSERVICEPROVIDERLib.dll</HintPath>
-      <EmbedInteropTypes>True</EmbedInteropTypes>
+      <HintPath>..\..\..\..\..\Program Files (x86)\Thermo\Nautilus\Interop.LSSERVICEPROVIDERLib.dll</HintPath>
+      <EmbedInteropTypes>False</EmbedInteropTypes>
     </Reference>
     <Reference Include="Microsoft.CSharp" />
-    <Reference Include="Microsoft.ReportViewer.Common, Version=10.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL" />
-    <Reference Include="Microsoft.ReportViewer.WinForms, Version=10.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL" />
+    <Reference Include="Microsoft.VisualBasic" />
     <Reference Include="System" />
     <Reference Include="System.Data.OracleClient" />
     <Reference Include="System.Drawing" />
@@ -105,20 +100,7 @@
       <DependentUpon>LicenseWriterForm.cs</DependentUpon>
     </Compile>
     <Compile Include="All\LicenseWriter\LicenseWriter.cs" />
-    <Compile Include="All\ReportingServices\ReportingServices.cs" />
-    <Compile Include="All\ReportingServices\ReportingServicesForm.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="All\ReportingServices\ReportingServicesForm.Designer.cs">
-      <DependentUpon>ReportingServicesForm.cs</DependentUpon>
-    </Compile>
-    <Compile Include="All\ReportingServices\ReportingServicesPreviewForm.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="All\ReportingServices\ReportingServicesPreviewForm.Designer.cs">
-      <DependentUpon>ReportingServicesPreviewForm.cs</DependentUpon>
-    </Compile>
-    <Compile Include="All\ReportingServices\ReportingServicesPrinting.cs" />
+    <Compile Include="All\OpenWorkflow\OpenWorkflow.cs" />
     <Compile Include="All\TransferFolderOwnership\TransferFolderOwnership.cs" />
     <Compile Include="All\TransferFolderOwnership\TransferFolderOwnershipForm.cs">
       <SubType>Form</SubType>
@@ -139,25 +121,12 @@
     <Compile Include="Env\TestPriceCalc\TestPriceCalc.cs" />
     <Compile Include="Env\WorksheetQcDelete\WorksheetQcDelete.cs" />
     <Compile Include="Ops\CheckProjectTask\CheckProjectTask.cs" />
-    <Compile Include="Ops\CheckProject\CheckProject.cs" />
-    <Compile Include="Ops\ClientTestSelector\ClientTestSelector.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="Ops\ClientTestSelector\ClientTestSelector.Designer.cs">
-      <DependentUpon>ClientTestSelector.cs</DependentUpon>
-    </Compile>
     <Compile Include="Ops\FixTurnaroundTime\FixTurnaroundTime.cs" />
     <Compile Include="Ops\FixTurnaroundTime\FixTurnaroundTimeForm.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="Ops\FixTurnaroundTime\FixTurnaroundTimeForm.Designer.cs">
       <DependentUpon>FixTurnaroundTimeForm.cs</DependentUpon>
-    </Compile>
-    <Compile Include="All\TextPropertyPage\TextPropertyPage.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="All\TextPropertyPage\TextPropertyPage.Designer.cs">
-      <DependentUpon>TextPropertyPage.cs</DependentUpon>
     </Compile>
     <Compile Include="Ops\M19aXrfResultFormat\M19aXrfResultFormat.cs" />
     <Compile Include="Ops\MccTransfer\MccTransfer.cs" />
@@ -209,7 +178,6 @@
     <Compile Include="Qa\CheckForDuplicateLogin\CheckForDuplicateLoginForm.Designer.cs">
       <DependentUpon>CheckForDuplicateLoginForm.cs</DependentUpon>
     </Compile>
-    <Compile Include="Qa\GetErpInfo\GetErpInfo.cs" />
     <Compile Include="Qa\ManufacturerManager\ManufacturerManager.cs" />
     <Compile Include="Qa\ManufacturerManager\ManufacturerManagerForm.cs">
       <SubType>Form</SubType>
@@ -290,18 +258,6 @@
     </Compile>
     <Compile Include="Qa\SamplingInfo\SamplingInfoForm.Designer.cs">
       <DependentUpon>SamplingInfoForm.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Qa\SoftwarePropertyPage\SoftwarePropertyCredentialsForm.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Qa\SoftwarePropertyPage\SoftwarePropertyCredentialsForm.Designer.cs">
-      <DependentUpon>SoftwarePropertyCredentialsForm.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Qa\SoftwarePropertyPage\SoftwarePropertyPage.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="Qa\SoftwarePropertyPage\SoftwarePropertyPage.Designer.cs">
-      <DependentUpon>SoftwarePropertyPage.cs</DependentUpon>
     </Compile>
     <Compile Include="Qa\UpdateFpWorkflowPhrase\UpdateFpWorkflowPhrase.cs" />
     <Compile Include="Qa\VendorDataUpload\VendorDataFile.cs" />
@@ -441,21 +397,21 @@
       <Isolated>False</Isolated>
       <EmbedInteropTypes>True</EmbedInteropTypes>
     </COMReference>
-    <COMReference Include="MSXML2">
-      <Guid>{F5078F18-C551-11D3-89B9-0000F81FE221}</Guid>
-      <VersionMajor>6</VersionMajor>
+    <COMReference Include="LSExtensionControlLib">
+      <Guid>{D56423AA-8E07-11D3-B3BF-00600857E60B}</Guid>
+      <VersionMajor>1</VersionMajor>
       <VersionMinor>0</VersionMinor>
       <Lcid>0</Lcid>
       <WrapperTool>tlbimp</WrapperTool>
       <Isolated>False</Isolated>
       <EmbedInteropTypes>True</EmbedInteropTypes>
     </COMReference>
-    <COMReference Include="VBIDE">
-      <Guid>{0002E157-0000-0000-C000-000000000046}</Guid>
-      <VersionMajor>5</VersionMajor>
-      <VersionMinor>3</VersionMinor>
+    <COMReference Include="MSXML2">
+      <Guid>{F5078F18-C551-11D3-89B9-0000F81FE221}</Guid>
+      <VersionMajor>6</VersionMajor>
+      <VersionMinor>0</VersionMinor>
       <Lcid>0</Lcid>
-      <WrapperTool>primary</WrapperTool>
+      <WrapperTool>tlbimp</WrapperTool>
       <Isolated>False</Isolated>
       <EmbedInteropTypes>True</EmbedInteropTypes>
     </COMReference>
@@ -470,13 +426,6 @@
     <EmbeddedResource Include="All\LicenseWriter\LicenseWriterForm.resx">
       <DependentUpon>LicenseWriterForm.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="All\ReportingServices\ReportingServicesForm.resx">
-      <DependentUpon>ReportingServicesForm.cs</DependentUpon>
-      <SubType>Designer</SubType>
-    </EmbeddedResource>
-    <EmbeddedResource Include="All\ReportingServices\ReportingServicesPreviewForm.resx">
-      <DependentUpon>ReportingServicesPreviewForm.cs</DependentUpon>
-    </EmbeddedResource>
     <EmbeddedResource Include="All\TransferFolderOwnership\TransferFolderOwnershipForm.resx">
       <DependentUpon>TransferFolderOwnershipForm.cs</DependentUpon>
     </EmbeddedResource>
@@ -484,14 +433,8 @@
       <DependentUpon>UnauthoriseForm.cs</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
-    <EmbeddedResource Include="Ops\ClientTestSelector\ClientTestSelector.resx">
-      <DependentUpon>ClientTestSelector.cs</DependentUpon>
-    </EmbeddedResource>
     <EmbeddedResource Include="Ops\FixTurnaroundTime\FixTurnaroundTimeForm.resx">
       <DependentUpon>FixTurnaroundTimeForm.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="All\TextPropertyPage\TextPropertyPage.resx">
-      <DependentUpon>TextPropertyPage.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Ops\PropagateLimits\PropagateLimitsForm.resx">
       <DependentUpon>PropagateLimitsForm.cs</DependentUpon>
@@ -546,12 +489,6 @@
     <EmbeddedResource Include="Qa\SamplingInfo\SamplingInfoForm.resx">
       <DependentUpon>SamplingInfoForm.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Qa\SoftwarePropertyPage\SoftwarePropertyCredentialsForm.resx">
-      <DependentUpon>SoftwarePropertyCredentialsForm.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Qa\SoftwarePropertyPage\SoftwarePropertyPage.resx">
-      <DependentUpon>SoftwarePropertyPage.cs</DependentUpon>
-    </EmbeddedResource>
     <EmbeddedResource Include="Qa\VendorDataUpload\VendorDataUploadForm.resx">
       <DependentUpon>VendorDataUploadForm.cs</DependentUpon>
     </EmbeddedResource>
@@ -588,7 +525,8 @@
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
-    <PostBuildEvent>copy "$(TargetDir)*.*" \\Nautilus\extensions\test</PostBuildEvent>
+    <PostBuildEvent>
+    </PostBuildEvent>
   </PropertyGroup>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

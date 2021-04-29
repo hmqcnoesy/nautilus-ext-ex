@@ -12,6 +12,7 @@ namespace NautilusExtensions.Qa {
         public string Name { get; set; }
         public string Specification { get; set; }
         public string Description { get; set; }
+        public bool IsSeriesIX { get; set; }
 
         // file options
         public string ResultFileExtension { get; set; }

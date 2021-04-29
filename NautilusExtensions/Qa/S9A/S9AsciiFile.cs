@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text.RegularExpressions;
-using System.Text;
+using System.Linq;
 using System.IO;
 using System.Data;
 using System.Windows.Forms;
@@ -10,6 +10,8 @@ using Excel;
 
 namespace NautilusExtensions.Qa {
     public class S9AsciiFile {
+        public enum FileTypes { SeriesIX, Bluehill }
+        public FileTypes FileType { get; private set; }
         public string Dimension1Name { get { return "Dim 1"; } }
         public string Dimension2Name { get { return "Dim 2"; } }
         public string Dimension3Name { get { return "Dim 3"; } }
@@ -19,7 +21,6 @@ namespace NautilusExtensions.Qa {
         public string FullName { get; private set; }
         public string RawDataFileLocation { get; private set; }
         public string AliquotName { get; private set; }
-        public string EmployeeId { get; private set; }
         public string InstrumentName { get; private set; }
         public string CrossheadSpeed { get; private set; }
         public string Temperature { get; private set; }
@@ -50,6 +51,16 @@ namespace NautilusExtensions.Qa {
             {"8", "Median"}
         };
 
+        private Dictionary<string, string> _bhToNautilusResultNames = new Dictionary<string, string>()
+        {
+            { "Mean", "Average" },
+            { "Standard Deviation", "Standard Deviation" },
+            { "Maximum", "Maximum" },
+            { "Minimum", "Minimum" },
+            { "Coefficient of variation", "Coefficient of Variation" },
+            { "Median", "Median" }
+        };
+
 
         public override string ToString() {
             return string.Format("{0} ({1})", Name.ToUpper().Replace(".ASC", string.Empty), AliquotName);
@@ -61,35 +72,45 @@ namespace NautilusExtensions.Qa {
         /// </summary>
         /// <param name="fi"></param>
         public S9AsciiFile(FileInfo fi) {
-            Name = fi.Name;
-            FullName = fi.FullName;
-            IsFileValid = true;  //this can be set to false if the ascii file is crappy, to prevent being displayed in gui
+            this.Name = fi.Name;
+            this.FullName = fi.FullName;
+            this.IsFileValid = true;  //this can be set to false if the ascii file is crappy, to prevent being displayed in gui
 
+            if (this.FullName.ToUpper().EndsWith(".CSV")) FileType = FileTypes.Bluehill;
+
+            if (this.FileType == FileTypes.Bluehill)
+                GetFileContentsInfoBluehill();
+            else
+                GetFileContentsInfo();
+        }
+
+
+        private void GetFileContentsInfo()
+        {
             //read the first line of text only
-            using (StreamReader sr = File.OpenText(fi.FullName)) {
+            using (StreamReader sr = File.OpenText(this.FullName))
+            {
                 string firstLine;
                 firstLine = sr.ReadLine();
 
-
                 //the header line must be at least 584 characters, otherwise there will be trouble
-                if (firstLine == null || firstLine.Length < 584) {
+                if (firstLine == null || firstLine.Length < 584)
+                {
                     MessageBox.Show(string.Format("The Series IX ascii file '{0}' is corrupt.  The header line does not have required info.", Name));
                     IsFileValid = false;
                     return;
                 }
 
-
                 //get specimen count
                 int specimenCount;
-                if (!int.TryParse(firstLine.Substring(13, 3).Trim(), out specimenCount)) {
+                if (!int.TryParse(firstLine.Substring(13, 3).Trim(), out specimenCount))
+                {
                     MessageBox.Show(string.Format("The number of specimens in '{0}' could not be determined.  Please correct the file and try again.", Name));
                     IsFileValid = false;
                     return;
                 }
 
-
                 //Get header information
-                EmployeeId = firstLine.Substring(37, 20).Trim();
                 CrossheadSpeed = firstLine.Substring(124, 14).Trim();
                 Humidity = firstLine.Substring(169, 5).Trim();
                 Temperature = firstLine.Substring(175, 5).Trim();
@@ -105,27 +126,85 @@ namespace NautilusExtensions.Qa {
         }
 
 
+        private void GetFileContentsInfoBluehill()
+        {
+            var fileContents = File.ReadAllLines(this.FullName);
+            if (fileContents.Length < 8)
+            {
+                MessageBox.Show($"Bluehill file '{this.Name}' is not valid.  Please correct the file and try again.");
+                IsFileValid = false;
+                return;
+            }
+
+            var maxSpecimenNumber = 0;
+
+            foreach(var line in fileContents)
+            {
+                var cells = line.Split(',');
+                if (int.TryParse(cells[0], out int specimenNumber) && specimenNumber > maxSpecimenNumber)
+                    maxSpecimenNumber = specimenNumber;
+            }
+
+            // Get header information
+            using (var parser = new Microsoft.VisualBasic.FileIO.TextFieldParser(this.FullName))
+            {
+                parser.TextFieldType = Microsoft.VisualBasic.FileIO.FieldType.Delimited;
+                parser.SetDelimiters(",");
+                parser.HasFieldsEnclosedInQuotes = true;
+
+                try
+                {
+                    var row1Cells = parser.ReadFields();
+                    var row2Cells = parser.ReadFields();
+                    var row3Cells = parser.ReadFields();
+
+                    CrossheadSpeed = row3Cells[10];
+                    Humidity = row3Cells[7];
+                    Temperature = row3Cells[8];
+                    AliquotName = row3Cells[3];
+                    UserField2Key = "SL Numbers";
+                    UserField2Value = row3Cells[5];
+                    InstrumentName = row3Cells[11];
+                }
+                catch
+                {
+                    MessageBox.Show($"Bluehill file '{this.Name}' is not valid.  Please correct the file and try again.");
+                    IsFileValid = false;
+                }
+            }
+        }
+
+
         /// <summary>
         /// Parses the remainder of a file, after using constructor.  IsFileValid should be checked before and after parsing.
         /// The list of strings with test names passed in should come from the file's specified setting.
         /// </summary>
         /// <param name="calculations"></param>
-        public void Parse(S9Config config) {
+        public void Parse(S9Config config)
+        {
+            if (this.FileType == FileTypes.Bluehill)
+                ParseBluehill(config);
+            else
+                ParseSeriesIX(config);
+        }
 
+
+        public void ParseSeriesIX(S9Config config)
+        {
             Tools = config.GetUserFieldsTable(UserField2Key, UserField2Value, UserField3Key, UserField3Value, UserField4Key, UserField4Value);
             Results = SetupResultsTable(config);
             DataTable dtDrim = config.IncludeDrim ? GetDRimResults() : null;
 
-            using (StreamReader sr = File.OpenText(FullName)) 
+            using (StreamReader sr = File.OpenText(FullName))
             {
-                
+
                 string currentLine;
-                currentLine = sr.ReadLine(); // first line was read in constructor, ingnored this time around.
+                currentLine = sr.ReadLine(); // first line was read in constructor, ignored this time around.
 
                 object[] rowToAdd;
                 string specimenId, statSummaryId;
 
-                while ((currentLine = sr.ReadLine()) != null) 
+                while ((currentLine = sr.ReadLine()) != null)
                 {
                     if (currentLine.Length < 666) continue;    // this keeps any substring operations on the line safe up through dimension 4's position.
 
@@ -134,7 +213,7 @@ namespace NautilusExtensions.Qa {
 
                     rowToAdd = new object[Results.Columns.Count];
 
-                    if (!string.IsNullOrEmpty(specimenId)) 
+                    if (!string.IsNullOrEmpty(specimenId))
                     {
                         rowToAdd[0] = specimenId;
                         rowToAdd[1] = "Actual " + specimenId;
@@ -144,15 +223,15 @@ namespace NautilusExtensions.Qa {
 
                         // keep track of total number of specimens.
                         TotalSpecimenCount++;
-                    } 
-                    else 
+                    }
+                    else
                     {
                         rowToAdd[0] = string.Empty;
-                        try 
+                        try
                         {
                             rowToAdd[1] = _statNames[statSummaryId];
-                        } 
-                        catch 
+                        }
+                        catch
                         {
                             IsFileValid = false;
                             MessageBox.Show(string.Format("The Series IX ascii file '{0}' is corrupt.  Invalid summary result ID ({0}).", Name, statSummaryId));
@@ -173,7 +252,7 @@ namespace NautilusExtensions.Qa {
 
                     //add columns from settings here
                     int asciiColumnPosition;
-                    foreach (KeyValuePair<string, S9Calculation> calculation in config.Calculations) 
+                    foreach (KeyValuePair<string, S9Calculation> calculation in config.Calculations)
                     {
                         int columnId = 0;
 
@@ -204,6 +283,94 @@ namespace NautilusExtensions.Qa {
                     Results.Rows.Add(rowToAdd);
                 }
             }
+        }
+
+
+        public void ParseBluehill(S9Config config)
+        {
+            Tools = new DataTable();
+            Tools.Columns.Add("Item");
+            Tools.Columns.Add("ID");
+            Tools.Rows.Add("SL Numbers", CleanSlNumbers(UserField2Value));
+
+            Results = SetupResultsTable(config);
+
+            using (var parser = new Microsoft.VisualBasic.FileIO.TextFieldParser(this.FullName))
+            {
+                parser.TextFieldType = Microsoft.VisualBasic.FileIO.FieldType.Delimited;
+                parser.SetDelimiters(",");
+                parser.HasFieldsEnclosedInQuotes = true;
+                
+                for (var i = 0; i < 5; i++)
+                    parser.ReadLine(); // throw away first 5 lines data
+
+                // use row 6 (result table header) to find Failure Mode and Comments columns
+                var resultHeaders = parser.ReadFields();
+                var colFailureMode = Array.FindIndex(resultHeaders, x => x == "Failure Mode");
+                var colComments = Array.FindIndex(resultHeaders, x => x == "Comments");
+
+                while (!parser.EndOfData)
+                {
+                    var cells = parser.ReadFields();
+                    var resultId = cells[0];
+                    var rowToAdd = new object[Results.Columns.Count];
+
+                    if (int.TryParse(resultId.TrimStart('X'), out int specimenId))
+                    {
+                        rowToAdd[0] = specimenId;
+                        rowToAdd[1] = "Actual " + specimenId;
+                        rowToAdd[2] = !resultId.StartsWith("X");
+                        this.TotalSpecimenCount++;
+                        if (!resultId.StartsWith("X")) this.ValidSpecimenCount++;
+                    }
+                    else
+                    {
+                        rowToAdd[0] = string.Empty;
+                        if (!_bhToNautilusResultNames.ContainsKey(resultId)) continue;
+
+                        rowToAdd[1] = _bhToNautilusResultNames[resultId];
+                        rowToAdd[2] = !resultId.StartsWith("X");
+                    }
+
+                    // specimen dimensions are cols B,C,D,E always
+                    var col = 3;
+                    if (config.CheckDimension1) rowToAdd[col] = cells[col++ - 2];
+                    if (config.CheckDimension2) rowToAdd[col] = cells[col++ - 2];
+                    if (config.CheckDimension3) rowToAdd[col] = cells[col++ - 2];
+                    if (config.CheckDimension4) rowToAdd[col] = cells[col++ - 2];
+
+                    //add columns from settings here
+                    foreach (var calculation in config.Calculations)
+                    {
+                        if (!int.TryParse(calculation.Key, out int columnId)) continue;
+
+                        if (cells.Length < columnId-1)
+                        {
+                            MessageBox.Show(string.Format("The settings for file '{0}' specify more calculation columns than the file contains."
+                                + "\r\nAttempted to access column '{1}'\r\nCorrect the file and try again.", Name, columnId));
+                            IsFileValid = false;
+                            return;
+                        }
+                        rowToAdd[col++] = cells[columnId-1];
+                    }
+
+                    // add failure mode and comments if their headers were found
+                    if (colFailureMode > -1) rowToAdd[col++] = cells[colFailureMode];
+                    if (colComments > -1) rowToAdd[col++] = cells[colComments];
+
+                    Results.Rows.Add(rowToAdd);
+                }
+            }
+        }
+
+
+        private string CleanSlNumbers(string slNumbers)
+        {
+            if (slNumbers == null) return string.Empty;
+            var cleaned = slNumbers.Trim();
+            cleaned = Regex.Replace(cleaned, @"[^A-Za-z0-9]", " ");
+            cleaned = Regex.Replace(cleaned, @"\s+", " ");
+            return cleaned;
         }
 
 
@@ -298,6 +465,12 @@ namespace NautilusExtensions.Qa {
         /// <param name="setting"></param>
         public void Validate(S9Config config) {
             ValidationErrors = new List<string>();
+
+            if (this.Name.ToLower().EndsWith("asc") && !config.IsSeriesIX)
+                ValidationErrors.Add($"File '{this.Name}' is a Series IX file, but specifies aliquot {this.AliquotName}, which has tests with Bluehill configs.");
+
+            if (this.Name.ToLower().EndsWith("csv") && config.IsSeriesIX)
+                ValidationErrors.Add($"File '{this.Name}' is a Bluehill file, but specifies aliquot {this.AliquotName}, which has tests with Series IX configs.");
 
             // check validation items
             if (config.CheckCrossheadSpeed) CheckConformance("Crosshead speed", CrossheadSpeed, config.CrossheadSpeedLower, config.CrossheadSpeedUpper);

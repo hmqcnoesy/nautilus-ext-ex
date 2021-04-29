@@ -9,6 +9,7 @@ using LSSERVICEPROVIDERLib;
 using System.Xml.Linq;
 using System.Xml.XPath;
 using System.Text;
+using System.Linq;
 
 namespace NautilusExtensions.Qa {
     public partial class S9AssistantForm : Form {
@@ -30,39 +31,39 @@ namespace NautilusExtensions.Qa {
         }
 
 
-        private void OpenFolder_Click(object sender, EventArgs e) {
-            using (FolderBrowserDialog fbd = new FolderBrowserDialog()) {
-                if (fbd.ShowDialog() == DialogResult.OK) {
-                    DirectoryInfo di = new DirectoryInfo(fbd.SelectedPath);
-                    FileInfo[] files = di.GetFiles("*.asc");
+        private void OpenFolder_Click(object sender, EventArgs e) 
+        {
+            using (var fbd = new FolderBrowserDialog()) 
+            {
+                if (fbd.ShowDialog() != DialogResult.OK) return;
+                DirectoryInfo di = new DirectoryInfo(fbd.SelectedPath);
+                var files = di.GetFiles().Where(x => x.Extension.ToLower() == ".asc" || x.Extension.ToLower() == ".csv").OrderBy(f => f.Name);
 
-                    Array.Sort(files, (f1, f2) => f1.Name.CompareTo(f2.Name));
-
-                    foreach (FileInfo fi in di.GetFiles("*.asc")) {
-                        LoadFile(fi);
-                    }
-                }
+                foreach (var fi in files) 
+                    LoadFile(fi);
             }
+
+            if (lboxAliquots.Items.Count == 1) lboxAliquots.SelectedIndex = 0;
         }
 
 
         private void OpenFiles_Click(object sender, EventArgs e) {
-            using (OpenFileDialog ofd = new OpenFileDialog()) {
+            using (OpenFileDialog ofd = new OpenFileDialog()) 
+            {
                 ofd.Multiselect = true;
-                ofd.Filter = "S9A files (*.asc)|*.asc|All files (*.*)|*.*";
+                ofd.Filter = "SeriesIX and Bluehill files|*.asc;*.csv";
                 ofd.ShowDialog();
-                string[] files = ofd.FileNames;
-                Array.Sort(files);
-                FileInfo fi;
+                var files = ofd.FileNames.OrderBy(f => f);
 
-                for (int i = 0; i < files.Length; i++) {
-                    fi = new FileInfo(files[i]);
+                for (int i = 0; i < files.Count(); i++) 
+                {
+                    var fi = new FileInfo(files.ElementAt(i));
 
-                    if (fi.Extension.ToUpper().Equals(".ASC")) {
-                        LoadFile(fi);
-                    }
+                    LoadFile(fi);
                 }
             }
+
+            if (lboxAliquots.Items.Count == 1) lboxAliquots.SelectedIndex = 0;
         }
 
 
@@ -273,6 +274,7 @@ namespace NautilusExtensions.Qa {
                 _selectedConfig.Name = reader["name"].ToString();
                 _selectedConfig.Specification = reader["u_specification"].ToString();
                 _selectedConfig.Description = reader["description"].ToString();
+                _selectedConfig.IsSeriesIX = "T" == reader["u_is_series_ix"].ToString();
 
                 // file options
                 _selectedConfig.ResultFileExtension = reader["u_result_file_ext"].ToString();
@@ -330,12 +332,10 @@ namespace NautilusExtensions.Qa {
 
 
         private void btnDeleteAll_Click(object sender, EventArgs e) {
-            if (MessageBox.Show("Remove all files from list?", "Remove All", MessageBoxButtons.OKCancel) == DialogResult.Cancel) return;
 
             ClearControls();
             _selectedConfig = null;
             txtSettings.Text = string.Empty;
-            //dgvSlNumbers.DataSource = null;
             lboxAliquots.Items.Clear();
         }
 
@@ -443,7 +443,7 @@ namespace NautilusExtensions.Qa {
                     }
                 }
 
-                // TO DO xml processor
+                // xml processor
                 if (_selectedConfig.UseXmlProcessor) {
                     string results = InputResultsUsingXml(file);
                     if (!string.IsNullOrEmpty(results)) {
@@ -780,6 +780,7 @@ namespace NautilusExtensions.Qa {
         private void btnOverrideValidationFailures_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e) {
             txtOverrideValidationFailuresPassword.Visible = !txtOverrideValidationFailuresPassword.Visible;
             btnOverrideValidationFailuresOk.Visible = !btnOverrideValidationFailuresOk.Visible;
+            txtOverrideValidationFailuresPassword.Focus();
         }
 
         private void btnOverrideValidationFailuresOk_Click(object sender, EventArgs e) {

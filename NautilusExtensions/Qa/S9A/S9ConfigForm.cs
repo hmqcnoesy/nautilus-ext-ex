@@ -47,7 +47,7 @@ namespace NautilusExtensions.Qa {
 
             //info group box
             _site.SetStringValue("u_specification", txtSpecification.Text);
-
+            _site.SetBooleanValue("u_is_series_ix", rdoSeriesIX.Checked);
 
             //validation group box
             _site.SetBooleanValue("u_check_spec_speed", chkSpeed.Checked);
@@ -176,7 +176,7 @@ namespace NautilusExtensions.Qa {
             double lowerSpeed, upperSpeed, lowerTemp, upperTemp, lowerHumidity, upperHumidity,
                 lowerValidSpecimenCount, upperValidSpecimenCount, lowerTotalSpecimenCount, upperTotalSpecimenCount, lowerDimension1, upperDimension1, 
                 lowerDimension2, upperDimension2, lowerDimension3, upperDimension3, lowerDimension4, upperDimension4;
-            bool isnullLowerSpeed, isnullUpperSpeed, isnullLowerTemp, isnullUpperTemp, isnullLowerHumidity, isnullUpperHumidity,
+            bool isSeriesIx, isnullLowerSpeed, isnullUpperSpeed, isnullLowerTemp, isnullUpperTemp, isnullLowerHumidity, isnullUpperHumidity,
                 isnullLowerValidSpecimenCount, isnullUpperValidSpecimenCount, isnullLowerTotalSpecimenCount, isnullUpperTotalSpecimenCount,
                 isnullLowerDimension1, isnullUpperDimension1, isnullLowerDimension2, isnullUpperDimension2,
                 isnullLowerDimension3, isnullUpperDimension3, isnullLowerDimension4, isnullUpperDimension4;
@@ -189,6 +189,7 @@ namespace NautilusExtensions.Qa {
             _site.GetStringValue("name", out name, out nullFlag);
             _site.GetStringValue("u_specification", out spec, out nullFlag);
             _site.GetStringValue("description", out desc, out nullFlag);
+            _site.GetBooleanValue("u_is_series_ix", out isSeriesIx, out nullFlag);
 
             //validation group box
             _site.GetBooleanValue("u_check_spec_speed", out speed, out nullFlag);
@@ -250,6 +251,9 @@ namespace NautilusExtensions.Qa {
             txtName.Text = name;
             txtSpecification.Text = spec;
             txtDescription.Text = desc;
+            //chkIsSeriesIX.Checked = isSeriesIx;
+            rdoSeriesIX.Checked = isSeriesIx;
+            rdoBluehill.Checked = !isSeriesIx;
 
             //populate validation group box
             chkSpeed.Checked = speed;
@@ -309,6 +313,13 @@ namespace NautilusExtensions.Qa {
             chkAverage.Checked = checkAverage;
             chkMedian.Checked = checkMedian;
             PopulateCalculationDgv(calculations);
+
+            //disable certain controls if not Series IX
+            if (!isSeriesIx)
+            {
+                chkIncludeDrim.Enabled = false;
+                grpUserDefinedPrompts.Enabled = false;
+            }
         }
 
         #endregion
@@ -386,14 +397,44 @@ namespace NautilusExtensions.Qa {
         private void checkbox_CheckedChanged(object sender, EventArgs e) {
             _site.SetModifiedFlag();
 
-            if (!(sender is CheckBox)) return;
+            var senderTag = string.Empty;
+            var senderChecked = false;
 
-            CheckBox chkSender = (CheckBox)sender;
-            if (chkSender.Tag != null) {
-                foreach (Control c in chkSender.Parent.Controls) {
-                    if (c != chkSender && c.Tag != null && c.Tag.ToString().Equals(chkSender.Tag.ToString() + "Dependent")) {
-                        c.Enabled = chkSender.Checked;
-                    }
+            var chkSender = sender as CheckBox;
+            if (chkSender != null)
+            {
+                senderTag = chkSender.Tag?.ToString() ?? string.Empty;
+                senderChecked = chkSender.Checked;
+            }
+
+            var rdoSender = sender as RadioButton;
+            if (rdoSender != null)
+            {
+                senderTag = rdoSender.Tag?.ToString() ?? string.Empty;
+                senderChecked = rdoSender.Checked;
+            }
+
+            if (!string.IsNullOrEmpty(senderTag)) 
+            {
+                foreach (Control c in GetAllDescendantControls(this)) 
+                {
+                    if (c.Tag != null && c.Tag.ToString().Equals(senderTag + "Dependent")) 
+                        c.Enabled = senderChecked;
+                }
+            }
+        }
+
+
+        private IEnumerable<Control> GetAllDescendantControls(Control control)
+        {
+            foreach (Control child in control.Controls)
+            {
+                yield return child;
+
+                if (child.HasChildren)
+                {
+                    foreach (Control grandchild in GetAllDescendantControls(child))
+                        yield return grandchild;
                 }
             }
         }
@@ -410,6 +451,33 @@ namespace NautilusExtensions.Qa {
 
         public int GetVersion() {
             return VERSION;
+        }
+
+        private void EnabledChangedDgv(object sender, EventArgs e)
+        {
+            var dgv = sender as DataGridView;
+            if (dgv == null) return;
+
+            if (dgv.Enabled)
+            {
+                dgv.RowHeadersDefaultCellStyle.ForeColor = SystemColors.ControlText;
+                dgv.DefaultCellStyle.BackColor = SystemColors.Window;
+                dgv.DefaultCellStyle.ForeColor = SystemColors.ControlText;
+                dgv.ColumnHeadersDefaultCellStyle.BackColor = SystemColors.Window;
+                dgv.ColumnHeadersDefaultCellStyle.ForeColor = SystemColors.ControlText;
+                dgv.ReadOnly = false;
+                dgv.EnableHeadersVisualStyles = true;
+            }
+            else
+            {
+                dgv.RowHeadersDefaultCellStyle.ForeColor = SystemColors.GrayText;
+                dgv.DefaultCellStyle.BackColor = SystemColors.Control;
+                dgv.DefaultCellStyle.ForeColor = SystemColors.GrayText;
+                dgv.ColumnHeadersDefaultCellStyle.BackColor = SystemColors.Control;
+                dgv.ColumnHeadersDefaultCellStyle.ForeColor = SystemColors.GrayText;
+                dgv.ReadOnly = true;
+                dgv.EnableHeadersVisualStyles = false;
+            }
         }
     }
 }

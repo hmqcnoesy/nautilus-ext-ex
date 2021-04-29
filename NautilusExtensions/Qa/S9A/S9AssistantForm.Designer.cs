@@ -23,9 +23,9 @@
         /// the contents of this method with the code editor.
         /// </summary>
         private void InitializeComponent() {
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle1 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle2 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle3 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle7 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle8 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle9 = new System.Windows.Forms.DataGridViewCellStyle();
             this.lboxAliquots = new System.Windows.Forms.ListBox();
             this.dgvSlNumbers = new System.Windows.Forms.DataGridView();
             this.lblAnalyst = new System.Windows.Forms.Label();
@@ -80,7 +80,7 @@
             this.lboxAliquots.FormattingEnabled = true;
             this.lboxAliquots.Location = new System.Drawing.Point(6, 44);
             this.lboxAliquots.Name = "lboxAliquots";
-            this.lboxAliquots.Size = new System.Drawing.Size(158, 121);
+            this.lboxAliquots.Size = new System.Drawing.Size(230, 121);
             this.lboxAliquots.TabIndex = 0;
             this.lboxAliquots.SelectedIndexChanged += new System.EventHandler(this.lboxAliquots_SelectedIndexChanged);
             this.lboxAliquots.DragDrop += new System.Windows.Forms.DragEventHandler(this.lboxAliquots_DragDrop);
@@ -90,14 +90,12 @@
             // 
             this.dgvSlNumbers.AllowUserToAddRows = false;
             this.dgvSlNumbers.AllowUserToDeleteRows = false;
-            this.dgvSlNumbers.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
             this.dgvSlNumbers.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.dgvSlNumbers.Location = new System.Drawing.Point(10, 94);
             this.dgvSlNumbers.Name = "dgvSlNumbers";
             this.dgvSlNumbers.RowHeadersVisible = false;
             this.dgvSlNumbers.RowHeadersWidth = 28;
-            this.dgvSlNumbers.Size = new System.Drawing.Size(215, 125);
+            this.dgvSlNumbers.Size = new System.Drawing.Size(387, 125);
             this.dgvSlNumbers.TabIndex = 1;
             // 
             // lblAnalyst
@@ -112,7 +110,7 @@
             // lblInstrumentName
             // 
             this.lblInstrumentName.AutoSize = true;
-            this.lblInstrumentName.Location = new System.Drawing.Point(228, 26);
+            this.lblInstrumentName.Location = new System.Drawing.Point(338, 26);
             this.lblInstrumentName.Name = "lblInstrumentName";
             this.lblInstrumentName.Size = new System.Drawing.Size(59, 13);
             this.lblInstrumentName.TabIndex = 112;
@@ -129,10 +127,10 @@
             // 
             // txtValidSpecimens
             // 
-            this.txtValidSpecimens.Location = new System.Drawing.Point(295, 49);
+            this.txtValidSpecimens.Location = new System.Drawing.Point(405, 49);
             this.txtValidSpecimens.Name = "txtValidSpecimens";
             this.txtValidSpecimens.ReadOnly = true;
-            this.txtValidSpecimens.Size = new System.Drawing.Size(100, 20);
+            this.txtValidSpecimens.Size = new System.Drawing.Size(160, 20);
             this.txtValidSpecimens.TabIndex = 8;
             // 
             // txtAnalystName
@@ -140,7 +138,7 @@
             this.txtAnalystName.Location = new System.Drawing.Point(60, 199);
             this.txtAnalystName.Name = "txtAnalystName";
             this.txtAnalystName.ReadOnly = true;
-            this.txtAnalystName.Size = new System.Drawing.Size(104, 20);
+            this.txtAnalystName.Size = new System.Drawing.Size(176, 20);
             this.txtAnalystName.TabIndex = 2;
             // 
             // txtCrossheadSpeed
@@ -148,21 +146,21 @@
             this.txtCrossheadSpeed.Location = new System.Drawing.Point(85, 49);
             this.txtCrossheadSpeed.Name = "txtCrossheadSpeed";
             this.txtCrossheadSpeed.ReadOnly = true;
-            this.txtCrossheadSpeed.Size = new System.Drawing.Size(100, 20);
+            this.txtCrossheadSpeed.Size = new System.Drawing.Size(160, 20);
             this.txtCrossheadSpeed.TabIndex = 3;
             // 
             // txtInstrument
             // 
-            this.txtInstrument.Location = new System.Drawing.Point(296, 23);
+            this.txtInstrument.Location = new System.Drawing.Point(406, 23);
             this.txtInstrument.Name = "txtInstrument";
             this.txtInstrument.ReadOnly = true;
-            this.txtInstrument.Size = new System.Drawing.Size(99, 20);
+            this.txtInstrument.Size = new System.Drawing.Size(160, 20);
             this.txtInstrument.TabIndex = 4;
             // 
             // label5
             // 
             this.label5.AutoSize = true;
-            this.label5.Location = new System.Drawing.Point(227, 52);
+            this.label5.Location = new System.Drawing.Point(337, 52);
             this.label5.Name = "label5";
             this.label5.Size = new System.Drawing.Size(62, 13);
             this.label5.TabIndex = 132;
@@ -180,7 +178,7 @@
             // lblTemperature
             // 
             this.lblTemperature.AutoSize = true;
-            this.lblTemperature.Location = new System.Drawing.Point(469, 52);
+            this.lblTemperature.Location = new System.Drawing.Point(686, 52);
             this.lblTemperature.Name = "lblTemperature";
             this.lblTemperature.Size = new System.Drawing.Size(70, 13);
             this.lblTemperature.TabIndex = 118;
@@ -200,7 +198,7 @@
             // 
             // txtTemperature
             // 
-            this.txtTemperature.Location = new System.Drawing.Point(537, 49);
+            this.txtTemperature.Location = new System.Drawing.Point(754, 49);
             this.txtTemperature.Name = "txtTemperature";
             this.txtTemperature.ReadOnly = true;
             this.txtTemperature.Size = new System.Drawing.Size(100, 20);
@@ -208,7 +206,7 @@
             // 
             // txtHumidity
             // 
-            this.txtHumidity.Location = new System.Drawing.Point(537, 23);
+            this.txtHumidity.Location = new System.Drawing.Point(754, 23);
             this.txtHumidity.Name = "txtHumidity";
             this.txtHumidity.ReadOnly = true;
             this.txtHumidity.Size = new System.Drawing.Size(100, 20);
@@ -217,7 +215,7 @@
             // lblHumidity
             // 
             this.lblHumidity.AutoSize = true;
-            this.lblHumidity.Location = new System.Drawing.Point(469, 26);
+            this.lblHumidity.Location = new System.Drawing.Point(686, 26);
             this.lblHumidity.Name = "lblHumidity";
             this.lblHumidity.Size = new System.Drawing.Size(50, 13);
             this.lblHumidity.TabIndex = 115;
@@ -228,7 +226,7 @@
             this.txtAliquotName.Location = new System.Drawing.Point(85, 23);
             this.txtAliquotName.Name = "txtAliquotName";
             this.txtAliquotName.ReadOnly = true;
-            this.txtAliquotName.Size = new System.Drawing.Size(100, 20);
+            this.txtAliquotName.Size = new System.Drawing.Size(160, 20);
             this.txtAliquotName.TabIndex = 1;
             // 
             // dgvResults
@@ -236,34 +234,34 @@
             this.dgvResults.AllowUserToAddRows = false;
             this.dgvResults.AllowUserToDeleteRows = false;
             this.dgvResults.AllowUserToResizeRows = false;
-            dataGridViewCellStyle1.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
-            dataGridViewCellStyle1.BackColor = System.Drawing.SystemColors.Control;
-            dataGridViewCellStyle1.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            dataGridViewCellStyle1.ForeColor = System.Drawing.SystemColors.WindowText;
-            dataGridViewCellStyle1.SelectionBackColor = System.Drawing.SystemColors.Highlight;
-            dataGridViewCellStyle1.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
-            dataGridViewCellStyle1.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
-            this.dgvResults.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle1;
+            dataGridViewCellStyle7.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle7.BackColor = System.Drawing.SystemColors.Control;
+            dataGridViewCellStyle7.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            dataGridViewCellStyle7.ForeColor = System.Drawing.SystemColors.WindowText;
+            dataGridViewCellStyle7.SelectionBackColor = System.Drawing.SystemColors.Highlight;
+            dataGridViewCellStyle7.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
+            dataGridViewCellStyle7.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
+            this.dgvResults.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle7;
             this.dgvResults.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            dataGridViewCellStyle2.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
-            dataGridViewCellStyle2.BackColor = System.Drawing.SystemColors.Window;
-            dataGridViewCellStyle2.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            dataGridViewCellStyle2.ForeColor = System.Drawing.SystemColors.ControlText;
-            dataGridViewCellStyle2.SelectionBackColor = System.Drawing.SystemColors.Highlight;
-            dataGridViewCellStyle2.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
-            dataGridViewCellStyle2.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
-            this.dgvResults.DefaultCellStyle = dataGridViewCellStyle2;
+            dataGridViewCellStyle8.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
+            dataGridViewCellStyle8.BackColor = System.Drawing.SystemColors.Window;
+            dataGridViewCellStyle8.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            dataGridViewCellStyle8.ForeColor = System.Drawing.SystemColors.ControlText;
+            dataGridViewCellStyle8.SelectionBackColor = System.Drawing.SystemColors.Highlight;
+            dataGridViewCellStyle8.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
+            dataGridViewCellStyle8.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
+            this.dgvResults.DefaultCellStyle = dataGridViewCellStyle8;
             this.dgvResults.Dock = System.Windows.Forms.DockStyle.Fill;
             this.dgvResults.Location = new System.Drawing.Point(3, 16);
             this.dgvResults.Name = "dgvResults";
-            dataGridViewCellStyle3.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
-            dataGridViewCellStyle3.BackColor = System.Drawing.SystemColors.Control;
-            dataGridViewCellStyle3.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            dataGridViewCellStyle3.ForeColor = System.Drawing.SystemColors.WindowText;
-            dataGridViewCellStyle3.SelectionBackColor = System.Drawing.SystemColors.Highlight;
-            dataGridViewCellStyle3.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
-            dataGridViewCellStyle3.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
-            this.dgvResults.RowHeadersDefaultCellStyle = dataGridViewCellStyle3;
+            dataGridViewCellStyle9.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle9.BackColor = System.Drawing.SystemColors.Control;
+            dataGridViewCellStyle9.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            dataGridViewCellStyle9.ForeColor = System.Drawing.SystemColors.WindowText;
+            dataGridViewCellStyle9.SelectionBackColor = System.Drawing.SystemColors.Highlight;
+            dataGridViewCellStyle9.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
+            dataGridViewCellStyle9.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
+            this.dgvResults.RowHeadersDefaultCellStyle = dataGridViewCellStyle9;
             this.dgvResults.RowHeadersVisible = false;
             this.dgvResults.RowHeadersWidth = 28;
             this.dgvResults.Size = new System.Drawing.Size(1105, 341);
@@ -283,7 +281,7 @@
             this.btnDeleteAll});
             this.toolStrip1.Location = new System.Drawing.Point(3, 16);
             this.toolStrip1.Name = "toolStrip1";
-            this.toolStrip1.Size = new System.Drawing.Size(130, 25);
+            this.toolStrip1.Size = new System.Drawing.Size(161, 25);
             this.toolStrip1.TabIndex = 141;
             this.toolStrip1.Text = "toolStrip1";
             // 
@@ -294,7 +292,7 @@
             this.btnOpenFolder.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.btnOpenFolder.Name = "btnOpenFolder";
             this.btnOpenFolder.Size = new System.Drawing.Size(23, 22);
-            this.btnOpenFolder.Text = "Load all .asc files in a folder";
+            this.btnOpenFolder.Text = "Load all files in a folder";
             this.btnOpenFolder.Click += new System.EventHandler(this.OpenFolder_Click);
             // 
             // btnOpenFiles
@@ -304,7 +302,7 @@
             this.btnOpenFiles.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.btnOpenFiles.Name = "btnOpenFiles";
             this.btnOpenFiles.Size = new System.Drawing.Size(23, 22);
-            this.btnOpenFiles.Text = "Load one or more .asc files";
+            this.btnOpenFiles.Text = "Load one or more files";
             this.btnOpenFiles.Click += new System.EventHandler(this.OpenFiles_Click);
             // 
             // toolStripSeparator1
@@ -352,7 +350,7 @@
             this.txtSettings.Location = new System.Drawing.Point(60, 173);
             this.txtSettings.Name = "txtSettings";
             this.txtSettings.ReadOnly = true;
-            this.txtSettings.Size = new System.Drawing.Size(104, 20);
+            this.txtSettings.Size = new System.Drawing.Size(176, 20);
             this.txtSettings.TabIndex = 0;
             // 
             // label1
@@ -366,6 +364,8 @@
             // 
             // groupBox2
             // 
+            this.groupBox2.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.groupBox2.Controls.Add(this.dgvSlNumbers);
             this.groupBox2.Controls.Add(this.btnRevalidate);
             this.groupBox2.Controls.Add(this.txtValidation);
@@ -383,9 +383,9 @@
             this.groupBox2.Controls.Add(this.txtValidSpecimens);
             this.groupBox2.Controls.Add(this.txtInstrument);
             this.groupBox2.Controls.Add(this.txtCrossheadSpeed);
-            this.groupBox2.Location = new System.Drawing.Point(188, 12);
+            this.groupBox2.Location = new System.Drawing.Point(260, 12);
             this.groupBox2.Name = "groupBox2";
-            this.groupBox2.Size = new System.Drawing.Size(643, 225);
+            this.groupBox2.Size = new System.Drawing.Size(860, 225);
             this.groupBox2.TabIndex = 144;
             this.groupBox2.TabStop = false;
             this.groupBox2.Text = "Info for selected file";
@@ -393,7 +393,7 @@
             // btnRevalidate
             // 
             this.btnRevalidate.AutoSize = true;
-            this.btnRevalidate.Location = new System.Drawing.Point(338, 77);
+            this.btnRevalidate.Location = new System.Drawing.Point(513, 77);
             this.btnRevalidate.Name = "btnRevalidate";
             this.btnRevalidate.Size = new System.Drawing.Size(58, 13);
             this.btnRevalidate.TabIndex = 135;
@@ -403,13 +403,15 @@
             // 
             // txtValidation
             // 
+            this.txtValidation.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.txtValidation.BackColor = System.Drawing.SystemColors.Control;
             this.txtValidation.ForeColor = System.Drawing.Color.DarkRed;
-            this.txtValidation.Location = new System.Drawing.Point(231, 94);
+            this.txtValidation.Location = new System.Drawing.Point(406, 94);
             this.txtValidation.Multiline = true;
             this.txtValidation.Name = "txtValidation";
             this.txtValidation.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
-            this.txtValidation.Size = new System.Drawing.Size(406, 125);
+            this.txtValidation.Size = new System.Drawing.Size(448, 125);
             this.txtValidation.TabIndex = 134;
             // 
             // label2
@@ -424,7 +426,7 @@
             // label3
             // 
             this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(228, 78);
+            this.label3.Location = new System.Drawing.Point(403, 78);
             this.label3.Name = "label3";
             this.label3.Size = new System.Drawing.Size(103, 13);
             this.label3.TabIndex = 112;
@@ -453,7 +455,7 @@
             this.groupBox4.Controls.Add(this.txtAnalystName);
             this.groupBox4.Location = new System.Drawing.Point(12, 12);
             this.groupBox4.Name = "groupBox4";
-            this.groupBox4.Size = new System.Drawing.Size(170, 225);
+            this.groupBox4.Size = new System.Drawing.Size(242, 225);
             this.groupBox4.TabIndex = 145;
             this.groupBox4.TabStop = false;
             this.groupBox4.Text = "Files";
