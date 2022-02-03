@@ -62,7 +62,7 @@ namespace NautilusExtensions.Qa {
         public string MatrixId { get; set; }
         public string IpItemNumber { get; set; }
         public string RowId { get; set; }
-        public string TreeNodeName { get { return Name + " (" + MatrixId + ")"; } }
+        public string TreeNodeName { get { return $"{Name} ({MatrixId}, {IpItemNumber}, {RowId})"; } }
         public List<Result> Results { get; set; }
 
         public Test() {

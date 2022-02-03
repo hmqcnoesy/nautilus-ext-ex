@@ -35,12 +35,15 @@
             this.lblFileName = new System.Windows.Forms.Label();
             this.btnLoadFile = new System.Windows.Forms.Button();
             this.backgroundWorker1 = new System.ComponentModel.BackgroundWorker();
+            this.contextMenuStrip1 = new System.Windows.Forms.ContextMenuStrip(this.components);
+            this.tsmiRemove = new System.Windows.Forms.ToolStripMenuItem();
+            this.contextMenuStrip1.SuspendLayout();
             this.SuspendLayout();
             // 
             // lblProgressStatus
             // 
-            this.lblProgressStatus.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)
-                        | System.Windows.Forms.AnchorStyles.Right)));
+            this.lblProgressStatus.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.lblProgressStatus.Location = new System.Drawing.Point(93, 414);
             this.lblProgressStatus.Name = "lblProgressStatus";
             this.lblProgressStatus.Size = new System.Drawing.Size(286, 13);
@@ -48,8 +51,8 @@
             // 
             // pbLoginProgress
             // 
-            this.pbLoginProgress.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)
-                        | System.Windows.Forms.AnchorStyles.Right)));
+            this.pbLoginProgress.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.pbLoginProgress.Location = new System.Drawing.Point(93, 436);
             this.pbLoginProgress.Name = "pbLoginProgress";
             this.pbLoginProgress.Size = new System.Drawing.Size(286, 23);
@@ -70,9 +73,10 @@
             // tvSample
             // 
             this.tvSample.AllowDrop = true;
-            this.tvSample.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
-                        | System.Windows.Forms.AnchorStyles.Left)
-                        | System.Windows.Forms.AnchorStyles.Right)));
+            this.tvSample.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.tvSample.ContextMenuStrip = this.contextMenuStrip1;
             this.tvSample.ImageIndex = 0;
             this.tvSample.ImageList = this.imageList1;
             this.tvSample.Location = new System.Drawing.Point(12, 41);
@@ -177,6 +181,20 @@
             this.backgroundWorker1.ProgressChanged += new System.ComponentModel.ProgressChangedEventHandler(this.backgroundWorker1_ProgressChanged);
             this.backgroundWorker1.RunWorkerCompleted += new System.ComponentModel.RunWorkerCompletedEventHandler(this.backgroundWorker1_RunWorkerCompleted);
             // 
+            // contextMenuStrip1
+            // 
+            this.contextMenuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.tsmiRemove});
+            this.contextMenuStrip1.Name = "contextMenuStrip1";
+            this.contextMenuStrip1.Size = new System.Drawing.Size(118, 26);
+            // 
+            // tsmiRemove
+            // 
+            this.tsmiRemove.Name = "tsmiRemove";
+            this.tsmiRemove.Size = new System.Drawing.Size(180, 22);
+            this.tsmiRemove.Text = "Remove";
+            this.tsmiRemove.Click += new System.EventHandler(this.tsmiRemove_Click);
+            // 
             // VendorDataUploadForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -194,6 +212,7 @@
             this.MinimizeBox = false;
             this.Name = "VendorDataUploadForm";
             this.Text = "Vendor Data Upload";
+            this.contextMenuStrip1.ResumeLayout(false);
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -211,5 +230,7 @@
         private System.Windows.Forms.Button btnLoadFile;
         private System.Windows.Forms.ImageList imageList1;
         private System.ComponentModel.BackgroundWorker backgroundWorker1;
+        private System.Windows.Forms.ContextMenuStrip contextMenuStrip1;
+        private System.Windows.Forms.ToolStripMenuItem tsmiRemove;
     }
 }

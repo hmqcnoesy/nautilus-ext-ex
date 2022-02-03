@@ -2,7 +2,9 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data.OracleClient;
+using System.Drawing;
 using System.IO;
+using System.Linq;
 using System.Text;
 using System.Windows.Forms;
 using System.Xml.Linq;
@@ -19,6 +21,7 @@ namespace NautilusExtensions.Qa {
         private OracleConnection _connection;
         private NautilusProcessXML _processXml;
         private List<Sample> _samples = new List<Sample>();
+        private List<Color> highlightColors = new List<Color> { Color.YellowGreen, Color.Yellow, Color.Violet, Color.Turquoise, Color.Tomato, Color.Thistle, Color.Tan, Color.SlateBlue, Color.SkyBlue, Color.SandyBrown };
 
         public VendorDataUploadForm(OracleConnection connection, NautilusProcessXML processXml, string operatorName) {
             InitializeComponent();
@@ -105,51 +108,62 @@ namespace NautilusExtensions.Qa {
 
                 //load the contents of the file into the form.  File must be .krt or .edf
                 string ext = file.Substring(file.Length - 3).ToLower();
-                if (ext.Equals("krt") || ext.Equals("edf")) {
-
-                    try {  //the Vendor Data File constructor can throw all manner of exceptions when parsing the file fails.
+                if (ext.Equals("krt") || ext.Equals("edf")) 
+                {
+                    try 
+                    {  //the Vendor Data File constructor can throw all manner of exceptions when parsing the file fails.
                         VendorDataFile vdf = new VendorDataFile(file);
                         _samples.AddRange(vdf.Samples);
 
-                        if (vdf.HasErrors) {
+                        if (vdf.HasErrors) 
                             MessageBox.Show(string.Format("There are non-critical errors in the file {0} that are ignored:\r\n{1}", fileNames[fileIndex], vdf.Errors));
-                        }
 
                         //if there is more than one sample (part number / serial number combination) in the file, make sure the user understands it's probably a mistake
-                        if (vdf.Samples.Count > 1) {
+                        if (vdf.Samples.Count > 1) 
+                        {
                             DialogResult dr = MessageBox.Show(string.Format("There is more than part/serial combination specified in file {0}.\r\n"
                                 + "Do NOT continue this login unless you are certain this is correct.\r\n"
                                 + "It is highly recommended that you click Cancel and contact the Nautilus admin.", fileNames[fileIndex]),
                                 "Multiple Samples", MessageBoxButtons.OKCancel, MessageBoxIcon.Stop, MessageBoxDefaultButton.Button2);
 
-                            if (dr == DialogResult.Cancel) {
+                            if (dr == DialogResult.Cancel) 
+                            {
                                 _samples.Clear();
                                 tvSample.Nodes.Clear();
                             }
                         }
-                    } catch (Exception ex) {
+                    } 
+                    catch (Exception ex) 
+                    {
                         ErrorHandler.LogError(_operatorName, "VendorDataUploadForm", string.Format("Error parsing file {0}.  Please notify the Nautilus admin.\r\n{1}", fileNames[fileIndex], ex.Message));
                         return;
                     }
-                } else {
+                } 
+                else 
+                {
                     ErrorHandler.LogError(_operatorName, "VendorDataUploadForm", string.Format("Unable to determine type of file {0}.  Kirkhill files must end in .krt, Cytec files in .edf", fileNames[fileIndex]));
                     return;
                 }
             }
 
-
             //check that each sample has not been logged in previously
             //allow developer to easily test with duplicate logins - just type the super secret code into the combobox
-            foreach (Sample s in _samples) {
+            foreach (Sample s in _samples)
+            {
                 sampleNames = GetSampleNamesFromPreviousUpload(s.PartNumber, s.SerialNumber);
-                if (!cmbProgramCode.Text.Equals(_superSecretCode) && !string.IsNullOrEmpty(sampleNames)) {
+                if (!cmbProgramCode.Text.Equals(_superSecretCode) && !string.IsNullOrEmpty(sampleNames)) 
+                {
                     MessageBox.Show("This part/serial/ip type already exists in Nauitlus.\r\n"
                         + "If changes to ADCAR data are required, make the changes to sample(s):\r\n" + sampleNames);
                     return;
                 }
             }
 
-            PopulateTreeView(_samples);
+            PopulateTreeView(_samples, out List<string> duplicateTests);
+            if (duplicateTests.Any())
+            {
+                MessageBox.Show("Duplicate test entries were detected (see list below).  To prevent duplicate tests, find the highlighted test nodes below, right-click and delete unwanted nodes.\r\n\r\n" + string.Join("\r\n", duplicateTests));
+            }
             Application.DoEvents();  //updates the interface with populated tree view before possible message box...
 
             btnLogin.Text = "Login";
@@ -164,52 +178,25 @@ namespace NautilusExtensions.Qa {
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-        private void btnLogin_Click(object sender, EventArgs e) {
+        private void btnLogin_Click(object sender, EventArgs e) 
+        {
             if (_samples.Count == 0) return;
 
-            if (btnLogin.Text.Equals("Login")) {
+            if (btnLogin.Text.Equals("Login")) 
+            {
 
                 //program code must be selected
                 string programCode = cmbProgramCode.Text;
-                if (string.IsNullOrEmpty(programCode)) {
+                if (string.IsNullOrEmpty(programCode)) 
+                {
                     MessageBox.Show("Select a program code before attempting login.");
                     return;
                 }
 
-
-                //when loading large files (>800 items in hierarchy) prompt user to do a file dump instead of interactive client login
-                //int itemCount = 0;
-                //foreach (Sample s in _samples) {
-                //    itemCount += s.ProgenyCount;
-                //}
-
-                //if (itemCount > 799) {
-                //    DialogResult dr = MessageBox.Show("This login could take an exceptionally long time.\r\n"
-                //        + "Do you want to use the background processor for adding / completing results?\r\n"
-                //        + "If you select Yes, you will have to manually authorise data later.\r\n"
-                //        + "If you select No, you will have to wait now for login to complete.",
-                //        "Long Wait", MessageBoxButtons.YesNo, MessageBoxIcon.Warning, MessageBoxDefaultButton.Button2);
-
-                //    if (dr == DialogResult.Yes) {
-
-                //        //make sure we can find the parsing location
-                //        _nautilusParsingPath = GetFileParsingPath();
-                //        if (string.IsNullOrEmpty(_nautilusParsingPath)) {
-                //            MessageBox.Show("Login will not proceed.  No parsing location found or provided.");
-                //            return;
-                //        }
-                        
-                //        backgroundWorker1.RunWorkerAsync("Login File");
-                //    } else {
-                //        backgroundWorker1.RunWorkerAsync("Login");
-                //    }
-                //} else {
-                //    backgroundWorker1.RunWorkerAsync("Login");
-                //}
-
-
                 backgroundWorker1.RunWorkerAsync("Login");
-            } else if (btnLogin.Text.Equals("Authorise")) {
+            } 
+            else if (btnLogin.Text.Equals("Authorise")) 
+            {
                 backgroundWorker1.RunWorkerAsync("Authorise");
             }
         }
@@ -218,11 +205,14 @@ namespace NautilusExtensions.Qa {
         /// <summary>
         /// Populates the tree view according to the _samples hierarchy.
         /// </summary>
-        private void PopulateTreeView(List<Sample> samples) {
+        private void PopulateTreeView(List<Sample> samples, out List<string> duplicateTests) {
 
             tvSample.Nodes.Clear();
             
             TreeNode tnSample, tnAliquot, tnTest, tnResult;
+            var allTestNodes = new List<TreeNode>();
+            var testUniqueStrings = new List<string>();
+            duplicateTests = new List<string>();
 
             foreach (Sample s in samples) {
                 tnSample = new TreeNode() {
@@ -247,8 +237,14 @@ namespace NautilusExtensions.Qa {
                             Name = t.Name,
                             Text = t.TreeNodeName,
                             ImageKey = "t" + t.Status.ToString().ToLower(),
-                            SelectedImageKey = "t" + t.Status.ToString().ToLower()
+                            SelectedImageKey = "t" + t.Status.ToString().ToLower(),
+                            Tag = t.ExternalReference
                         };
+
+                        if (testUniqueStrings.Contains(t.TreeNodeName))
+                            duplicateTests.Add(t.TreeNodeName);
+                        else
+                            testUniqueStrings.Add(t.TreeNodeName);
 
                         foreach (Result r in t.Results) {
                             tnResult = new TreeNode() {
@@ -260,10 +256,19 @@ namespace NautilusExtensions.Qa {
                             tnTest.Nodes.Add(tnResult);
                         }
                         tnAliquot.Nodes.Add(tnTest);
+                        allTestNodes.Add(tnTest);
                     }
                     tnSample.Nodes.Add(tnAliquot);
                 }
                 tvSample.Nodes.Add(tnSample);
+            }
+
+            foreach(var tn in allTestNodes)
+            {
+                var duplicateEntry = duplicateTests.Select((testInfo, idx) => new { testInfo, idx }).Where(x => x.testInfo == tn.Text).FirstOrDefault();
+                if (duplicateEntry == null) continue;
+
+                tn.BackColor = highlightColors[duplicateEntry.idx % highlightColors.Count];
             }
         }
 
@@ -455,6 +460,22 @@ namespace NautilusExtensions.Qa {
                 }
             }
 
+            return null;
+        }
+
+
+        private object FindParentDataObjectByDescription(string guid) {
+            foreach (Sample s in _samples)
+            {
+                foreach (Aliquot a in s.Aliquots)
+                {
+                    if (a.ExternalReference.Equals(guid)) return s;
+                    foreach (Test t in a.Tests)
+                    {
+                        if (t.ExternalReference.Equals(guid)) return a;
+                    }
+                }
+            }
             return null;
         }
 
@@ -701,7 +722,7 @@ namespace NautilusExtensions.Qa {
             if (e.Error == null) {
                 pbLoginProgress.Value = 0;
                 lblProgressStatus.Text = string.Empty;
-                PopulateTreeView(_samples);
+                PopulateTreeView(_samples, out List<string> duplicateTests);
             } else {
                 ErrorHandler.LogError(_operatorName, "VendorDataUploadForm", "There was an error processing the request.  Please notify the Nautilus admin.\r\n" + e.Error.Message);
             }
@@ -875,6 +896,18 @@ namespace NautilusExtensions.Qa {
             if (e.Data.GetDataPresent(DataFormats.FileDrop, false)) {
                 e.Effect = DragDropEffects.All;
             }
+        }
+
+        private void tsmiRemove_Click(object sender, EventArgs e)
+        {
+            var cms = (ContextMenuStrip)((ToolStripMenuItem)sender).Owner;
+            var tn = tvSample.GetNodeAt(tvSample.PointToClient(cms.Location));
+            if (tn == null || !tn.ImageKey.StartsWith("t")) return;
+            var aliquot = (Aliquot)FindParentDataObjectByDescription((string)tn.Tag);
+            var test = (Test)FindDataObjectByDescription((string)tn.Tag);
+            if (aliquot == null || test == null) return;
+            aliquot.Tests.Remove(test);
+            tn.Remove();
         }
     }
 

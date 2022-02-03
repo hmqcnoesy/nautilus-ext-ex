@@ -115,7 +115,7 @@ namespace NautilusExtensions.All {
 
             //get the pathToLogFile here from the registry
             //use c:\temp if we can't find one
-            pathToLogFile = (string)Registry.GetValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Thermo\Nautilus\9.1\Directory", "Log", "C:\\temp");
+            pathToLogFile = (string)Registry.GetValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Thermo\Nautilus\9.3\Directory", "Log", "C:\\temp");
 
             //make sure the directory exists
             if (!Directory.Exists(pathToLogFile)) {
